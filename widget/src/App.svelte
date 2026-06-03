@@ -118,6 +118,7 @@
         {#if outputs.glazewm}
             {#if outputs.glazewm.bindingModes.length}
                 {#each outputs.glazewm.bindingModes as mode (mode.name)}
+
                     <div class="content-center text-tertiary">
                         {mode.displayName || mode.name}
                     </div>
@@ -126,12 +127,18 @@
                     </div>
                 {/each}
             {/if}
-            <div class="content-center text-fg-muted">
+            <div
+                class="flex items-center gap-2 hover:bg-secondary-container hover:text-on-secondary-container has-[>button:active]:bg-secondary-container/40 rounded-md transition"
+            >
+                <button type="button" class="px-2 py-1" onclick={() => {
+                    outputs.glazewm!.runCommand('toggle-tiling-direction');
+                }}>
                 {#if outputs.glazewm.tilingDirection === 'horizontal'}
                     H
                 {:else}
                     V
                 {/if}
+                </button>
             </div>
             <div class="flex items-center">
                 <div class="w-px h-3 bg-outline-variant"></div>
@@ -141,7 +148,10 @@
                     <button
                         type="button"
                         data-active={workspace.hasFocus ? '' : undefined}
-                        class="text-fg-muted data-active:bg-primary-container data-active:text-on-primary-container h-full px-2 aspect-square text-base! rounded-full text-center content-center transition"
+                        class="text-fg-muted data-active:bg-primary-container data-active:text-on-primary-container not-data-active:hover:bg-primary-container/60 not-data-active:active:bg-primary-container/20 h-full px-2 aspect-square text-base! rounded-full text-center content-center transition"
+                        onclick={() => {
+                            outputs.glazewm!.runCommand(`focus --workspace ${workspace.name}`);
+                        }}
                     >
                         {workspace.displayName || workspace.name}
                     </button>
@@ -169,11 +179,11 @@
         {/if}
         {#if outputs.media?.currentSession}
             <div
-                class="flex items-center gap-2 px-2 py-1 hover:bg-secondary-container hover:text-on-secondary-container has-[>button:active]:bg-secondary-container/40 rounded-md transition"
+                class="flex items-center hover:bg-secondary-container hover:text-on-secondary-container has-[>button:active]:bg-secondary-container/40 rounded-md transition"
             >
                 <button
                     type="button"
-                    class="flex items-center gap-2 focus:outline-none"
+                    class="flex items-center gap-2 focus:outline-none px-2 py-1"
                     onclick={() => {
                         expandMedia = !expandMedia;
                     }}
@@ -186,7 +196,7 @@
                 </button>
                 {#if expandMedia}
                     <div
-                        class="flex items-center starting:w-0 starting:-translate-x-2 starting:opacity-0 transition-[width,translate,opacity] [interpolate-size:allow-keywords] duration-200"
+                        class="flex items-center starting:w-0 starting:-translate-x-2 starting:opacity-0 transition-[width,translate,opacity] [interpolate-size:allow-keywords] duration-200 pr-2 py-1"
                     >
                         <button
                             onclick={() => {
